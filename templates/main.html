@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'nav.html' %}
+    {% block content %}
+    {% endblock content %}
+
+    <script>
+        // Enhanced back button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add loading state for navigation buttons
+            const navButtons = document.querySelectorAll('.btn[href], .btn-primary[href]');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Add a subtle loading effect
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Handle browser back button
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    // Page was restored from cache, reset any loading states
+                    const buttons = document.querySelectorAll('.btn');
+                    buttons.forEach(btn => {
+                        btn.style.transform = '';
+                    });
+                }
+            });
+        });
+
+        // Utility function for back navigation
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Fallback to home page if no history
+                window.location.href = '{% url "home" %}';
+            }
+        }
+
+        // Add keyboard shortcuts for navigation
+        document.addEventListener('keydown', function(e) {
+            // Alt + H for Home
+            if (e.altKey && e.key === 'h') {
+                e.preventDefault();
+                const homeLink = document.querySelector('a[href*="home"]');
+                if (homeLink) {
+                    homeLink.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome to the Home Page</h1>
+    <form class="search-form" action="">
+        <input type="text" name="q" placeholder="Search tasks...">
+        <button type="submit">Search</button>
+    </form>
+    <hr>
+    <h1>All Tasks</h1>
+    <a href="{% url 'add' %}" class="btn">Add New Task</a>
+    <hr>
+    {% for i in tasks %}
+    <div class="task-item">
+        <h2>{{ i.id }} - {{ i.title_data }} - {{ i.desc_data }}</h2>
+        <div class="task-actions">
+            <a href="{% url 'update' i.id %}">Update</a>
+            <a href="{% url 'mark_complete' i.id %}">Mark Complete</a>
+            <a href="{% url 'delete' i.id %}">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

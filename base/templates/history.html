@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container">
+    <h1>Deleted Tasks History</h1>
+    <div class="history-actions">
+        <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+        <form method="POST" action="{% url 'delete_all_history' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Are you sure you want to delete all history?')" class="btn btn-danger">Delete All History</button>
+        </form>
+        <form method="POST" action="{% url 'restore_all_tasks' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Are you sure you want to restore all tasks?')" class="btn btn-success">Restore All Tasks</button>
+        </form>
+    </div>
+    <hr>
+    {% for i in tasks %}
+    <div class="task-item">
+        <h2>{{ i.id }} - {{ i.title_data }} - {{ i.desc_data }}</h2>
+        <div class="task-actions">
+            <a href="{% url 'delete_history' i.id %}" onclick="return confirm('Delete this history item permanently?')">Delete</a> |
+            <a href="{% url 'restore_task' i.id %}" onclick="return confirm('Restore this task?')">Restore</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% if not tasks %}
+    <div class="no-history">
+        <p>No deleted tasks in history.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Go to Home</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

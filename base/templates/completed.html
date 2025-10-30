@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Completed Tasks</h1>
+    <hr>
+    {% for i in tasks %}
+    <div class="task-item">
+        <h2>{{ i.id }} - {{ i.title_data }} - {{ i.desc_data }}</h2>
+        <div class="task-actions">
+            <a href="{% url 'update' i.id %}">Update</a>
+            <a href="{% url 'mark_incomplete' i.id %}">Mark Incomplete</a>
+            <a href="{% url 'delete' i.id %}">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% if not tasks %}
+    <p>No completed tasks yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Support</h1>
+    <p class="lead-text">Tell us what you need help with and our team will get back to you.</p>
+
+    {% if user.is_authenticated %}
+    <div class="alert alert-info">
+        <p>✨ Your contact information has been pre-filled from your profile.</p>
+    </div>
+    {% endif %}
+
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="form-field{% if field.errors %} has-error{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p class="field-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Send message</button>
+    </form>
+
+    <div class="support-contact">
+        <h2>Prefer email?</h2>
+        <p>Reach us any time at <a href="mailto:support@example.com">support@example.com</a></p>
+        <p class="response-time">We typically respond within one business day.</p>
+    </div>
+</div>
+{% endblock %}
